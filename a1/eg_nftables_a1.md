@@ -1,0 +1,20 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet filter {
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        iif "eth1" oif "eth0" accept
+        iif "eth0" oif "eth1" ct state established,related accept
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority 100;
+        oif "eth0" masquerade
+    }
+}

@@ -1,0 +1,11 @@
+# Allow inbound OpenVPN (UDP 1194) — new connections to Internal Gateway
+iif "eth0" oif "eth1" udp dport 1194 ct state new accept
+
+# Allow OpenVPN return traffic from Internal Gateway back to client
+iif "eth1" oif "eth0" udp sport 1194 ct state established accept
+
+# DNAT: redirect inbound OpenVPN UDP to Internal Gateway
+iif "eth0" udp dport 1194 dnat to 192.168.1.1
+
+# SNAT: OpenVPN return traffic
+oif "eth1" udp dport 1194 ip daddr 192.168.1.1 snat to 192.168.1.254

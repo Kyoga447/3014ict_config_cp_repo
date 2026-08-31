@@ -1,0 +1,29 @@
+sudo mkdir ~/openvpn-ca
+sudo ln -s /usr/share/easy-rsa/* ~/openvpn-ca/
+sudo chown user ~/openvpn-ca
+sudo chmod 700 ~/openvpn-ca
+cd ~/openvpn-ca
+
+sudo cp pki/ca.crt /etc/openvpn/
+sudo cp pki/private/server.key /etc/openvpn/
+sudo cp pki/issued/server.crt /etc/openvpn/
+sudo cp pki/dh.pem /etc/openvpn/dh2048.pem
+sudo cp ta.key /etc/openvpn/
+
+sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf
+/etc/openvpn/
+sudo nano /etc/openvpn/server.conf
+
+mkdir -p ~/client-configs/keys
+chmod 700 ~/client-configs
+mkdir -p ~/client-configs/files
+chmod 700 ~/client-configs/files
+
+cp ~/openvpn-ca/pki/private/client1.key ~/client-configs/keys/
+sudo cp ~/openvpn-ca/pki/issued/client1.crt ~/client-configs/keys/
+sudo cp ~/openvpn-ca/ta.key ~/client-configs/keys/
+sudo cp /etc/openvpn/ca.crt ~/client-configs/keys/
+
+sudo cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf
+~/client-configs/base.conf
+sudo nano ~/client-configs/base.conf
